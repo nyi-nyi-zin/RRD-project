@@ -1,9 +1,10 @@
 import React from "react";
-import { Form, Link } from "react-router-dom";
+import { Form, Link, redirect } from "react-router-dom";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { useActionData } from "react-router-dom";
+import uuid from "react-uuid";
 
-const PostForm = ({ header, btnText, oldPostData }) => {
+const PostForm = ({ header, btnText, oldPostData, method }) => {
   const data = useActionData();
 
   let titleError;
@@ -28,7 +29,7 @@ const PostForm = ({ header, btnText, oldPostData }) => {
         </Link>
       </div>
 
-      <Form method="post">
+      <Form method={method}>
         <div className="form-input">
           <label htmlFor="form-title">Title</label>
           <input
@@ -79,3 +80,37 @@ const PostForm = ({ header, btnText, oldPostData }) => {
 };
 
 export default PostForm;
+
+export const action = async ({ request, params }) => {
+  const data = await request.formData();
+
+  const postData = {
+    id: uuid(),
+    title: data.get("title"),
+    description: data.get("description"),
+    image: data.get("image"),
+    date: data.get("date"),
+  };
+
+  let url = "http://localhost:8080/posts";
+
+  if (request.method === "PATCH") {
+    url = `http://localhost:8080/posts/${params.id}`;
+  }
+
+  const response = await fetch(url, {
+    method: request.method,
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(postData),
+  });
+
+  if (response.status === 422) {
+    return response; //To catch the response data with  useActionData
+  }
+
+  if (!response.ok) {
+  }
+  return redirect("/");
+};

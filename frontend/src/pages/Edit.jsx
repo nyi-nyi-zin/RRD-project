@@ -9,6 +9,7 @@ export const Edit = () => {
         header="Edit your post now"
         btnText={"Update"}
         oldPostData={post}
+        method={"patch"}
       />
     </>
   );
