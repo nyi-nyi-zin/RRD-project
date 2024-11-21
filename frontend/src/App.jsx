@@ -7,10 +7,12 @@ import { loader as detailsLoader } from "./pages/Details";
 import { action as createAction } from "./components/PostForm";
 import { action as deleteAction } from "./pages/Details";
 import { action as updateAction } from "./components/PostForm";
+import { action as authAction } from "./pages/Auth";
 
 import Details from "./pages/Details";
 import { Edit } from "./pages/Edit";
 import Error from "./pages/Error";
+import Auth from "./pages/Auth";
 
 function App() {
   const router = createBrowserRouter([
@@ -28,6 +30,11 @@ function App() {
           path: "/create-post",
           element: <Create />,
           action: createAction,
+        },
+        {
+          path: "/auth",
+          element: <Auth />,
+          action: authAction,
         },
         {
           path: ":id",

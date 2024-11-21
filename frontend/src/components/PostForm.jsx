@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Link, redirect } from "react-router-dom";
+import { Form, json, Link, redirect } from "react-router-dom";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { useActionData } from "react-router-dom";
 import uuid from "react-uuid";
@@ -111,6 +111,16 @@ export const action = async ({ request, params }) => {
   }
 
   if (!response.ok) {
+    throw json(
+      {
+        message: "post form action error",
+        console: () => console.log(this.message),
+      },
+
+      {
+        status: 500,
+      }
+    );
   }
   return redirect("/");
 };
